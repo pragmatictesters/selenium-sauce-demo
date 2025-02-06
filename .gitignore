@@ -39,3 +39,8 @@ build/
 
 #Ignore logs
 *.log
+/.idea/.gitignore
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/uiDesigner.xml
+/.idea/vcs.xml
