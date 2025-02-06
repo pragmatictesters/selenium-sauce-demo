@@ -5,6 +5,7 @@ import com.pragmatic.sauce.pages.LoginPage;
  import  static org.testng.Assert.*;
 
 import com.pragmatic.sauce.pages.ProductsPage;
+import com.pragmatic.sauce.util.ConfigReader;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -13,7 +14,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void testLoginWithValidCredentials() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user","secret_sauce");
+        loginPage.login(ConfigReader.getProperty("demo.username"),ConfigReader.getProperty("demo.password"));
         ProductsPage productsPage = new ProductsPage(driver);
         assertEquals(productsPage.getTitle(),"Products");
     }
