@@ -1,0 +1,65 @@
+package com.pragmatic.sauce.tests;
+
+import com.pragmatic.sauce.base.BaseTest;
+import com.pragmatic.sauce.pages.LoginPage;
+ import  static org.testng.Assert.*;
+
+import com.pragmatic.sauce.pages.ProductsPage;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class LoginTest extends BaseTest {
+
+    @Test
+    public void testLoginWithValidCredentials() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user","secret_sauce");
+        ProductsPage productsPage = new ProductsPage(driver);
+        assertEquals(productsPage.getTitle(),"Products");
+    }
+
+    @Test
+    public void testLoginWithBlankUsernameAndBlankPassword() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("","");
+        assertEquals(loginPage.getError(),"Epic sadface: Username is required");
+    }
+
+    @Test
+    public void testLoginWithBlankUsernameAndPassword() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("","secret_sauce");
+        assertEquals(loginPage.getError(),"Epic sadface: Username is required");
+    }
+
+    @Test
+    public void testLoginWithUsernameAndBlankPassword() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user","");
+        assertEquals(loginPage.getError(),"Epic sadface: Password is required");
+    }
+
+    @Test
+    public void testLoginWithInvalidCredentials() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user","invalidPassword");
+        assertEquals(loginPage.getError(),"Epic sadface: Username and password do not match any user in this service");
+    }
+
+    @Test
+    public void testCaseSensitivityOfLoginCredentials() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login("standard_user","Secret_sauce");
+        assertEquals(loginPage.getError(),"Epic sadface: Username and password do not match any user in this service");
+    }
+
+    @Test
+    public void testPlaceholders() {
+        SoftAssert softAssert = new SoftAssert();
+        LoginPage loginPage = new LoginPage(driver);
+        softAssert.assertEquals(loginPage.getUsernamePlaceholder(), "Username");
+        softAssert.assertEquals(loginPage.getPasswordPlaceholder(), "Password");
+        softAssert.assertAll();
+    }
+
+}
