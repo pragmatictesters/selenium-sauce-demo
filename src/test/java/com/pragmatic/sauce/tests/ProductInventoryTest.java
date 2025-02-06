@@ -12,7 +12,6 @@ import static org.testng.Assert.*;
 
 public class ProductInventoryTest extends BaseTest {
 
-
     @Test
     public void testProductExistsByName() {
         ProductsPage productsPage = new ProductsPage(driver);
@@ -47,11 +46,19 @@ public class ProductInventoryTest extends BaseTest {
     }
 
     @Test
+    public void testChangeOfButtonsInInventoryPage() {
+        String productName="Sauce Labs Backpack";
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.clickButton(productName, "Add to cart");
+        assertEquals(productsPage.getButtonCaption(productName), "Remove");
+        productsPage.clickButton(productName, "Remove");
+        assertEquals(productsPage.getButtonCaption(productName), "Add to cart");
+    }
+
+    @Test
     public void testProductCountInProductPage() {
         ProductsPage productsPage = new ProductsPage(driver);
         List<ProductDetail> productDetail = productsPage.getAllProductDetails();
         assertEquals(productDetail.size(), 6);
     }
-
-
 }

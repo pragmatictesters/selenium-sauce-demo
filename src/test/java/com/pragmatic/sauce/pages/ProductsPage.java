@@ -78,4 +78,30 @@ public class ProductsPage {
         return productDetailsList;
     }
 
+
+    public String getButtonCaption(String productName) {
+        // Find the product based on its name
+        WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
+
+        // Locate the button for this product
+        WebElement button = product.findElement(By.xpath(".//ancestor::div[@data-test='inventory-item']//button"));
+        // Return the caption (button text)
+        return button.getText();
+    }
+
+    public void clickButton(String productName, String buttonCaption) {
+        // Find the product based on its name
+        WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
+
+        // Locate the button for this product
+        WebElement button = product.findElement(By.xpath(".//ancestor::div[@data-test='inventory-item']//button"));
+
+        // Ensure the button caption matches the required one before clicking
+        if (button.getText().equals(buttonCaption)) {
+            button.click();
+        } else {
+            System.out.println("Button caption mismatch for product: " + productName);
+        }
+    }
+
 }
