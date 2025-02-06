@@ -1,31 +1,28 @@
 package com.pragmatic.sauce.tests;
 
 import com.pragmatic.sauce.base.BaseTest;
-import com.pragmatic.sauce.pages.LoginPage;
 import com.pragmatic.sauce.pages.ProductDetail;
 import com.pragmatic.sauce.pages.ProductsPage;
-import com.pragmatic.sauce.util.ConfigReader;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.List;
 
 import static org.testng.Assert.*;
 
 public class ProductInventoryTest extends BaseTest {
 
+
     @Test
     public void testProductExistsByName() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(ConfigReader.getProperty("demo.username"), ConfigReader.getProperty("demo.password"));
         ProductsPage productsPage = new ProductsPage(driver);
         assertTrue(productsPage.isProductExist("Sauce Labs Backpack"));
     }
 
+
     @Test
     public void testProductDoesNotExistsByName() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(ConfigReader.getProperty("demo.username"), ConfigReader.getProperty("demo.password"));
         ProductsPage productsPage = new ProductsPage(driver);
         assertFalse(productsPage.isProductExist("Sauce Labs Backpack New"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
@@ -33,13 +30,27 @@ public class ProductInventoryTest extends BaseTest {
 
     @Test
     public void testProductDetails() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(ConfigReader.getProperty("demo.username"), ConfigReader.getProperty("demo.password"));
+        String productName="Sauce Labs Backpack";
+        String expectedProductDescription = "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.";
+        String expectedPrice = "$29.99";
+        String expectedAlt = "Sauce Labs Backpack";
+        String regexSrc = "/static/media/sauce-backpack.*.jpg$";
+
         ProductsPage productsPage = new ProductsPage(driver);
-        ProductDetail productDetail = productsPage.getProductDetails("Sauce Labs Backpack");
-        assertEquals(productDetail.getDescription(),
-                "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
-        assertEquals(productDetail.getPriceWithCurrency(), "$29.99");
+        ProductDetail productDetail = productsPage.getProductDetails(productName);
+
+        softAssert.assertEquals(productDetail.getDescription(), expectedProductDescription);
+        softAssert.assertEquals(productDetail.getPriceWithCurrency(), expectedPrice);
+        softAssert.assertEquals(productDetail.getImageAlt(), expectedAlt);
+        softAssert.assertTrue(productDetail.getImageSrc().matches(regexSrc));
+        softAssert.assertAll();
+    }
+
+    @Test
+    public void testProductCountInProductPage() {
+        ProductsPage productsPage = new ProductsPage(driver);
+        List<ProductDetail> productDetail = productsPage.getAllProductDetails();
+        assertEquals(productDetail.size(), 6);
     }
 
 

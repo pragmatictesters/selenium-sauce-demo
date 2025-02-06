@@ -5,6 +5,8 @@ public class ProductDetail {
     private  String name;
     private String description;
     private String priceWithCurrency;
+    private String imageAlt;
+    private String imageSrc;
 
     public String getName() {
         return name;
@@ -28,5 +30,22 @@ public class ProductDetail {
 
     public void setPriceWithCurrency(String priceWithCurrency) {
         this.priceWithCurrency = priceWithCurrency;
+    }
+
+
+    public String getImageAlt() {
+        return imageAlt;
+    }
+
+    public void setImageAlt(String imageAlt) {
+        this.imageAlt = imageAlt;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }
