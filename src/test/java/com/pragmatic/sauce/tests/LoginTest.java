@@ -55,7 +55,7 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    public void testPlaceholders() {
+    public void testPlaceholdersInLoginPage() {
         SoftAssert softAssert = new SoftAssert();
         LoginPage loginPage = new LoginPage(driver);
         softAssert.assertEquals(loginPage.getUsernamePlaceholder(), "Username");
