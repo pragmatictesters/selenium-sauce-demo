@@ -4,37 +4,42 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Log {
-    private static final Logger logger = LogManager.getLogger(Log.class);
+
+    private static Logger getLogger() {
+        // Get the actual calling class (skip the Log class itself)
+        String callingClass = new Throwable().getStackTrace()[2].getClassName();
+        return LogManager.getLogger(callingClass);
+    }
 
     public static void trace(String message) {
-        logger.trace(message);
+        getLogger().trace(message);
     }
 
     public static void debug(String message) {
-        logger.debug(message);
+        getLogger().debug(message);
     }
 
     public static void info(String message) {
-        logger.info(message);
+        getLogger().info(message);
     }
 
     public static void info(String message, String parameter) {
-        logger.info(message, parameter);
+        getLogger().info(message, parameter);
     }
 
     public static void warn(String message) {
-        logger.warn(message);
+        getLogger().warn(message);
     }
 
     public static void warn(String message, String parameter) {
-        logger.warn(message, parameter);
+        getLogger().warn(message, parameter);
     }
-
 
     public static void error(String message) {
-        logger.error(message);
+        getLogger().error(message);
     }
+
     public static void fatal(String message) {
-        logger.fatal(message);
+        getLogger().fatal(message);
     }
 }
