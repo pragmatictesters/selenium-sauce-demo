@@ -6,6 +6,7 @@ import com.pragmatic.sauce.pages.LoginPage;
 
 import com.pragmatic.sauce.pages.ProductsPage;
 import com.pragmatic.sauce.util.ConfigReader;
+import com.pragmatic.sauce.util.TestDataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -54,6 +55,13 @@ public class LoginTest extends BaseTest {
         assertEquals(loginPage.getError(),"Epic sadface: Username and password do not match any user in this service");
     }
 
+
+    @Test(dataProviderClass = TestDataProvider.class, dataProvider = "user-credentials")
+    public void testLoginWithInvalidCredentialsDataDriven(String username, String password, String expectedMessage) {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username,password);
+        assertEquals(loginPage.getError(),expectedMessage);
+    }
     @Test
     public void testPlaceholdersInLoginPage() {
         SoftAssert softAssert = new SoftAssert();
