@@ -46,7 +46,4 @@ public class CheckoutTest extends BaseTest {
         assertEquals(checkoutPage.getError(), "Error: Postal Code is required");
     }
 
-
-
-
 }
