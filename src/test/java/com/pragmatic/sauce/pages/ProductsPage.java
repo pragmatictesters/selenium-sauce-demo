@@ -10,6 +10,7 @@ import static com.pragmatic.sauce.util.Log.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductsPage {
 
@@ -89,7 +90,9 @@ public class ProductsPage {
         return button.getText();
     }
 
-    public void clickButton(String productName, String buttonCaption) {
+
+
+    public ProductsPage clickButton(String productName, String buttonCaption) {
         // Find the product based on its name
         WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
 
@@ -102,6 +105,34 @@ public class ProductsPage {
         } else {
             System.out.println("Button caption mismatch for product: " + productName);
         }
+
+        return this;
+    }
+
+    public ProductsPage addProduct(String productName) {
+        this.clickButton(productName, "Add to cart");
+        return this;
+    }
+    public ProductsPage removeProduct(String productName) {
+        this.clickButton(productName, "Remove");
+        return this;
+    }
+
+
+    public List<String> getAllProductNamesDeprecated() {
+        List<ProductDetail> allProducts = getAllProductDetails();
+        List<String> allProductNames = new ArrayList<>();
+
+        for (ProductDetail productDetail: allProducts) {
+            allProductNames.add(productDetail.getName());
+        }
+        return allProductNames;
+    }
+
+    public List<String> getAllProductNames() {
+        return getAllProductDetails().stream()
+                .map(ProductDetail::getName)
+                .collect(Collectors.toList());
     }
 
 }
