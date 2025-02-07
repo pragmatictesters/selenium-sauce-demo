@@ -5,8 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
-import static com.pragmatic.sauce.util.Log.*;
+import static com.pragmatic.sauce.util.LogManager.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,13 @@ import java.util.stream.Collectors;
 public class ProductsPage {
 
     private final WebDriver driver;
-    @FindBy(css = "span[data-test='title']")
+
+    @FindBy(css = "[data-test='title']")
     WebElement ttlProducts;
+
+     @FindBy(css = "[data-test='product-sort-container']")
+    WebElement lstSort;
+
 
     // Define the XPath pattern as a reusable String
     private static final String PRODUCT_XPATH = "//div[@data-test='inventory-item-name' and normalize-space(text())='%s']";
@@ -135,4 +141,27 @@ public class ProductsPage {
                 .collect(Collectors.toList());
     }
 
+    public List<Double> getAllProductPricesAsNumbers() {
+        return getAllProductDetails().stream()
+                .map(product -> Double.parseDouble(product.getPriceWithCurrency().replace("$", ""))) // Remove `$` and parse
+                .collect(Collectors.toList());
+    }
+
+    public ProductsPage sortZ2A(){
+        Select selSort =  new Select (lstSort);
+        selSort.selectByVisibleText("Name (Z to A)");
+        return this;
+    }
+
+    public ProductsPage sortPriceLowToHigh() {
+        Select selSort =  new Select (lstSort);
+        selSort.selectByVisibleText("Price (low to high)");
+        return this;
+    }
+
+    public ProductsPage sortPriceHighToLow() {
+        Select selSort =  new Select (lstSort);
+        selSort.selectByVisibleText("Price (high to low)");
+        return this;
+    }
 }
