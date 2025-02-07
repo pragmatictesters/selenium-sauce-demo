@@ -1,11 +1,14 @@
 package com.pragmatic.sauce.base;
 
 import com.pragmatic.sauce.pages.LoginPage;
+import com.pragmatic.sauce.util.BrowserManager;
 import com.pragmatic.sauce.util.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import org.testng.asserts.SoftAssert;
 
 import static com.pragmatic.sauce.util.Log.*;
@@ -19,9 +22,10 @@ public class BaseTest {
     protected SoftAssert softAssert;
 
     @BeforeMethod
-    public void beforeMethod(Method method) {
+    @Parameters({"browser", "headless"})
+    public void beforeMethod(@Optional ("chrome") String browser, @Optional("false") boolean headless, Method method) {
         debug("Initializing the browser");
-        driver = new ChromeDriver();
+        driver = BrowserManager.getDriver(browser, headless);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         debug("Browser is initialized");
