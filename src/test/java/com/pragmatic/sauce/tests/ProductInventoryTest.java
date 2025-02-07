@@ -18,7 +18,6 @@ public class ProductInventoryTest extends BaseTest {
         assertTrue(productsPage.isProductExist("Sauce Labs Backpack"));
     }
 
-
     @Test
     public void testProductDoesNotExistsByName() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
