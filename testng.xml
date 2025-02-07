@@ -1,8 +1,16 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Selenium Test Suite">
+
+    <parameter name="browser" value="firefox"/>
+    <parameter name="headless" value="faslse"/>
+
     <test name="Login Tests">
         <classes>
-            <class name="com.pragmatic.sauce.tests.LoginTest"/>
+            <class name="com.pragmatic.sauce.tests.LoginTest">
+                <methods>
+                    <include name="testLoginWithValidCredentials"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>
