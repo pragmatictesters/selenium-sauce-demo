@@ -18,20 +18,26 @@ public class CartPage {
     @FindBy(css = "[data-test='inventory-item']")
     List<WebElement> cartItems;
 
+    @FindBy(css = "[data-test='checkout']")
+    WebElement btnCheckout;
+
+    @FindBy(css = "[data-test='continue-shopping']")
+    WebElement btnContinueShopping;
+
     // Define the XPath pattern as a reusable String
     private static final String PRODUCT_XPATH = "//div[@data-test='inventory-item-name' and normalize-space(text())='%s']";
 
 
-    public CartPage(WebDriver driver){
+    public CartPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return ttlCart.getText();
     }
 
-    public int getProductCount(){
+    public int getProductCount() {
         return cartItems.size();
     }
 
@@ -46,13 +52,19 @@ public class CartPage {
         return productDetail;
     }
 
-    public CartPage removeProduct(String productName){
+    public CartPage removeProduct(String productName) {
         // Find the product based on its name
         WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
         product.findElement(By.xpath(".//ancestor::div[@data-test='inventory-item']//button")).click();
         return this;
     }
 
+    public void clickContinue(){
+        btnContinueShopping.click();
+    }
 
+    public void clickCheckout(){
+        btnCheckout.click();
+    }
 
 }
