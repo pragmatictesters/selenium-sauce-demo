@@ -3,7 +3,7 @@ package com.pragmatic.sauce.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import static com.pragmatic.sauce.util.Log.*;
+import static com.pragmatic.sauce.util.LogManager.*;
 
 public class ConfigReader {
     private static Properties properties;
