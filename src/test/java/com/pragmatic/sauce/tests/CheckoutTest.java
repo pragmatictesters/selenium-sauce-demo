@@ -20,7 +20,7 @@ public class CheckoutTest extends BaseTest {
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         checkoutPage.typeFirstname("Janesh");
         checkoutPage.typeLastname("Kodikara");
-        checkoutPage.typePostalCode("11566");
+        checkoutPage.typePostalCode("115666");
         checkoutPage.clickContinue();
         CheckoutOverviewPage overviewPage = new CheckoutOverviewPage(driver);
         assertEquals(overviewPage.getTitle(), "Checkout: Overview");
