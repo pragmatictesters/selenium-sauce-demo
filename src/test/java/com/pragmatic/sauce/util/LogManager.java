@@ -1,14 +1,13 @@
 package com.pragmatic.sauce.util;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Log {
+public class LogManager {
 
     private static Logger getLogger() {
         // Get the actual calling class (skip the Log class itself)
         String callingClass = new Throwable().getStackTrace()[2].getClassName();
-        return LogManager.getLogger(callingClass);
+        return org.apache.logging.log4j.LogManager.getLogger(callingClass);
     }
 
     public static void trace(String message) {
