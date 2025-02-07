@@ -1,7 +1,5 @@
 package com.pragmatic.sauce.pages;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,6 +26,11 @@ public class CheckoutPage {
 
     @FindBy(css = "[data-test='cancel']")
     WebElement btnCancel;
+
+    @FindBy(css = "[data-test='error']")
+    WebElement msgError;
+
+
 
     public CheckoutPage(WebDriver driver) {
         this.driver = driver;
@@ -59,6 +62,10 @@ public class CheckoutPage {
 
     public void clickCancel() {
         btnCancel.click();
+    }
+
+    public String getError(){
+        return msgError.getText();
     }
 
 
