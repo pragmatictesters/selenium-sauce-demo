@@ -62,6 +62,16 @@ public class LoginTest extends BaseTest {
         loginPage.login(username,password);
         assertEquals(loginPage.getError(),expectedMessage);
     }
+
+    @Test(dataProviderClass = TestDataProvider.class, dataProvider = "csvUserCredentials")
+    public void testLoginWithInvalidCredentialsDDTCSV(String username, String password, String expectedMessage) {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username,password);
+        assertEquals(loginPage.getError(),expectedMessage);
+    }
+
+
+
     @Test
     public void testPlaceholdersInLoginPage() {
         SoftAssert softAssert = new SoftAssert();
