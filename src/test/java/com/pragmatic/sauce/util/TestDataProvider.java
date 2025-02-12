@@ -34,6 +34,19 @@ public class TestDataProvider {
         };
     }
 
+    @DataProvider(name = "productData")
+    public Object[][] getProductTestData() {
+        return new Object[][] {
+                { "Sauce Labs Backpack",
+                        "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.",
+                        "$29.99", "Sauce Labs Backpack", ".*/static/media/sauce-backpack.*\\.jpg$" },
+
+                { "Sauce Labs Bike Light",
+                        "A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.",
+                        "$9.99", "Sauce Labs Bike Light", ".*/static/media/bike-light.*\\.jpg$" }
+        };
+    }
+
     // DataProvider that reads data from CSV
     @DataProvider(name = "csvUserCredentials")
     public Object[][] readFromCSV() throws IOException {
