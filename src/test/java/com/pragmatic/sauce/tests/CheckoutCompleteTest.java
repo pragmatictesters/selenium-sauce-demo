@@ -4,12 +4,15 @@ import com.pragmatic.sauce.base.BaseTest;
 import com.pragmatic.sauce.pages.*;
 import net.datafaker.Faker;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
 import static org.testng.Assert.*;
 
 public class CheckoutCompleteTest extends BaseTest {
 
     @Test
     public void testInformationInCheckoutCompletePage() {
+
         String productName = "Sauce Labs Backpack";
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addProduct(productName);
@@ -21,10 +24,35 @@ public class CheckoutCompleteTest extends BaseTest {
         CheckoutOverviewPage overviewPage = new CheckoutOverviewPage(driver);
         overviewPage.clickFinish();
         CheckoutCompletePage completePage = new CheckoutCompletePage(driver);
-        assertEquals(completePage.getTitle(), "Checkout: Complete!");
+        assertEquals(completePage.getTitle(), "Checkout: Complete");
         assertEquals(completePage.getCompleteHeader(), "Thank you for your order!");
         assertEquals(completePage.getCompleteMessage(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
     }
+
+    @Test
+    public void testInformationInCheckoutCompletePageSoftAssertion() {
+
+        SoftAssert sAssert = new SoftAssert();
+
+        String productName = "Sauce Labs Backpack";
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.addProduct(productName);
+        CartIconPage cartIcon = new CartIconPage(driver);
+        cartIcon.clickCartIcon();
+        CartPage cart = new CartPage(driver);
+        cart.clickCheckout();
+        fillCheckoutInformation();
+        CheckoutOverviewPage overviewPage = new CheckoutOverviewPage(driver);
+        overviewPage.clickFinish();
+        CheckoutCompletePage completePage = new CheckoutCompletePage(driver);
+        sAssert.assertEquals(completePage.getTitle(), "Checkout: Complete!");
+        sAssert.assertEquals(completePage.getCompleteHeader(), "Thank you for your order!");
+        sAssert.assertEquals(completePage.getCompleteMessage(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
+        sAssert.assertAll();
+    }
+
+
+
 
     private void fillCheckoutInformation() {
         Faker faker = new Faker();
