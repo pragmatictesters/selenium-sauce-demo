@@ -22,6 +22,11 @@ public class LoginPage {
     private WebElement msgError;
 
 
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
     public LoginPage typeUsername(String username) {
         txtUsername.sendKeys(username);
         return this;
@@ -38,11 +43,6 @@ public class LoginPage {
 
     public String getError() {
         return msgError.getText();
-    }
-
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
     }
 
     public void login(String username, String password) {
