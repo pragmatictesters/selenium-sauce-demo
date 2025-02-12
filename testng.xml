@@ -2,7 +2,7 @@
 <suite name="Selenium Test Suite">
 
     <parameter name="browser" value="firefox"/>
-    <parameter name="headless" value="faslse"/>
+    <parameter name="headless" value="false"/>
 
     <test name="Login Tests">
         <classes>
