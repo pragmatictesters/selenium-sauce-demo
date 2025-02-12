@@ -1,6 +1,7 @@
 package com.pragmatic.sauce.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,7 @@ import static com.pragmatic.sauce.util.LogManager.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProductsPage {
@@ -41,60 +43,107 @@ public class ProductsPage {
     }
 
     public boolean isProductExist(String productName) {
-        List<WebElement> products = driver.findElements(By.xpath(String.format(PRODUCT_XPATH, productName)));
-        if (!products.isEmpty()) {
+        try {
+            driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
             info("Product {} exists in the inventory page", productName);
             return true;
-        } else {
+        } catch (NoSuchElementException e) {
             warn("Product {} does not exist in the inventory page", productName);
             return false;
         }
     }
 
+
+//    This code is refactored
+//    public ProductDetail getProductDetails(String productName) {
+//        WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
+//        WebElement inventoryItem = product.findElement(By.xpath("./ancestor::div[@data-test='inventory-item']"));
+//        ProductDetail productDetail = new ProductDetail();
+//        productDetail.setDescription(inventoryItem.findElement(By.xpath(".//div[@data-test='inventory-item-desc']")).getText());
+//        productDetail.setName(productName);
+//        productDetail.setPriceWithCurrency(inventoryItem.findElement(By.xpath(".//div[@data-test='inventory-item-price']")).getText());
+//
+//        // Extract image alt and src
+//        WebElement productImage = inventoryItem.findElement(By.xpath(".//img[starts-with(@data-test, 'inventory-item-')]"));
+//        productDetail.setImageAlt(productImage.getDomAttribute("alt"));
+//        productDetail.setImageSrc(productImage.getDomAttribute("src"));
+//
+//        return productDetail;
+//    }
+
+
     public ProductDetail getProductDetails(String productName) {
-        WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
-        WebElement inventoryItem = product.findElement(By.xpath("./ancestor::div[@data-test='inventory-item']"));
-        ProductDetail productDetail = new ProductDetail();
-        productDetail.setDescription(inventoryItem.findElement(By.xpath(".//div[@data-test='inventory-item-desc']")).getText());
-        productDetail.setName(productName);
-        productDetail.setPriceWithCurrency(inventoryItem.findElement(By.xpath(".//div[@data-test='inventory-item-price']")).getText());
+        WebElement productElement = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
+        WebElement inventoryItem = productElement.findElement(By.xpath("./ancestor::div[@data-test='inventory-item']"));
 
-        // Extract image alt and src
-        WebElement productImage = inventoryItem.findElement(By.xpath(".//img[starts-with(@data-test, 'inventory-item-')]"));
-        productDetail.setImageAlt(productImage.getDomAttribute("alt"));
-        productDetail.setImageSrc(productImage.getDomAttribute("src"));
+        // Extract product details using a streamlined approach
+        return new ProductDetail()
+                .setName(productName)
+                .setDescription(getElementText(inventoryItem, ".//div[@data-test='inventory-item-desc']"))
+                .setPriceWithCurrency(getElementText(inventoryItem, ".//div[@data-test='inventory-item-price']"))
+                .setImageAlt(getElementAttribute(inventoryItem, ".//img[starts-with(@data-test, 'inventory-item-')]", "alt"))
+                .setImageSrc(getElementAttribute(inventoryItem, ".//img[starts-with(@data-test, 'inventory-item-')]", "src"));
+    }
 
-        return productDetail;
+    // Utility methods to handle element retrieval safely
+    private String getElementText(WebElement parent, String xpath) {
+        return Optional.ofNullable(parent.findElement(By.xpath(xpath)))
+                .map(WebElement::getText)
+                .orElse("");
+    }
+
+    private String getElementAttribute(WebElement parent, String xpath, String attribute) {
+        return Optional.ofNullable(parent.findElement(By.xpath(xpath)))
+                .map(element -> element.getDomAttribute(attribute))
+                .orElse("");
     }
 
 
-    // Method to extract details of all products into an array
+//
+//    This code is refactored
+//    public List<ProductDetail> getAllProductDetails() {
+//        // Find all products on the page
+//        List<WebElement> products = driver.findElements(By.xpath(ALL_PRODUCTS_XPATH));
+//
+//        // List to store product details
+//        List<ProductDetail> productDetailsList = new ArrayList<>();
+//
+//        // Loop through each product and extract the details
+//        for (WebElement product : products) {
+//            String productName = product.findElement(By.xpath(".//div[@data-test='inventory-item-name']")).getText();
+//            ProductDetail productDetail = getProductDetails(productName);
+//            productDetailsList.add(productDetail);
+//        }
+//        return productDetailsList;
+//    }
+
     public List<ProductDetail> getAllProductDetails() {
-        // Find all products on the page
-        List<WebElement> products = driver.findElements(By.xpath(ALL_PRODUCTS_XPATH));
-
-        // List to store product details
-        List<ProductDetail> productDetailsList = new ArrayList<>();
-
-        // Loop through each product and extract the details
-        for (WebElement product : products) {
-            String productName = product.findElement(By.xpath(".//div[@data-test='inventory-item-name']")).getText();
-            ProductDetail productDetail = getProductDetails(productName);
-            productDetailsList.add(productDetail);
-        }
-        return productDetailsList;
+        return driver.findElements(By.xpath("//div[@data-test='inventory-item']"))
+                .stream()
+                .map(this::extractProductDetails)
+                .collect(Collectors.toList());
     }
 
+    private ProductDetail extractProductDetails(WebElement inventoryItem) {
+        return new ProductDetail()
+                .setName(getElementText(inventoryItem, ".//div[@data-test='inventory-item-name']"))
+                .setDescription(getElementText(inventoryItem, ".//div[@data-test='inventory-item-desc']"))
+                .setPriceWithCurrency(getElementText(inventoryItem, ".//div[@data-test='inventory-item-price']"))
+                .setImageAlt(getElementAttribute(inventoryItem, ".//img[starts-with(@data-test, 'inventory-item-')]", "alt"))
+                .setImageSrc(getElementAttribute(inventoryItem, ".//img[starts-with(@data-test, 'inventory-item-')]", "src"));
+    }
 
     public String getButtonCaption(String productName) {
-        // Find the product based on its name
-        WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
-
-        // Locate the button for this product
-        WebElement button = product.findElement(By.xpath(".//ancestor::div[@data-test='inventory-item']//button"));
-        // Return the caption (button text)
-        return button.getText();
+        try {
+            WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
+            WebElement button = product.findElement(By.xpath("./ancestor::div[@data-test='inventory-item']//button"));
+            return button.getText().trim();
+        } catch (NoSuchElementException e) {
+            error("Product or Button is not found for the product: " + productName);
+            return "";
+        }
     }
+
 
 
 
@@ -109,7 +158,7 @@ public class ProductsPage {
         if (button.getText().equals(buttonCaption)) {
             button.click();
         } else {
-            System.out.println("Button caption mismatch for product: " + productName);
+            error("Button caption mismatch for product: " + productName);
         }
 
         return this;
