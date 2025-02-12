@@ -15,7 +15,6 @@ public class LoginSteps  {
     private LoginPage loginPage;
     private WebDriver driver;
 
-
     @Before
     public void before(){
         driver = new ChromeDriver();
@@ -41,5 +40,32 @@ public class LoginSteps  {
     public void theUserShouldBeRedirectedToTheHomepage() {
         ProductsPage productsPage = new ProductsPage(driver);
         Assert.assertEquals(productsPage.getTitle(), "Products");
+    }
+
+    @When("the user logs in with username {string} and password {string}")
+    public void theUserLogsInWithUsernameAndPassword(String username, String password) {
+        loginPage.login(username, password);
+    }
+
+    @Then("the user should see an error message {string}")
+    public void theUserShouldSeeAnErrorMessage(String expectedError) {
+        Assert.assertEquals(loginPage.getError(), expectedError);
+
+    }
+
+    @When("the user logs in with empty username and password")
+    public void theUserLogsInWithEmptyUsernameAndPassword() {
+        loginPage.login("", "");
+    }
+
+    @When("the user logs in with username {string} and empty password")
+    public void theUserLogsInWithUsernameAndEmptyPassword(String username) {
+        loginPage.login(username, "");
+    }
+
+    @When("the user logs in with empty username and password {string}")
+    public void theUserLogsInWithEmptyUsernameAndPassword(String password) {
+        loginPage.login("", password);
+
     }
 }
