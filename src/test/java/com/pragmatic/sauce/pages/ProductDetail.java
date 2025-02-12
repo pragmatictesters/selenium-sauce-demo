@@ -12,24 +12,27 @@ public class ProductDetail {
         return name;
     }
 
-    public void setName(String name) {
+    public ProductDetail setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public ProductDetail setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public String getPriceWithCurrency() {
         return priceWithCurrency;
     }
 
-    public void setPriceWithCurrency(String priceWithCurrency) {
+    public ProductDetail setPriceWithCurrency(String priceWithCurrency) {
         this.priceWithCurrency = priceWithCurrency;
+        return this;
     }
 
 
@@ -37,15 +40,17 @@ public class ProductDetail {
         return imageAlt;
     }
 
-    public void setImageAlt(String imageAlt) {
+    public ProductDetail setImageAlt(String imageAlt) {
         this.imageAlt = imageAlt;
+        return this;
     }
 
     public String getImageSrc() {
         return imageSrc;
     }
 
-    public void setImageSrc(String imageSrc) {
+    public ProductDetail setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
+        return this;
     }
 }
