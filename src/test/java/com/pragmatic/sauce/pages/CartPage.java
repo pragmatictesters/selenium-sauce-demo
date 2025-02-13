@@ -46,20 +46,20 @@ public class CartPage {
     public ProductDetail getProductDetails(String productName) {
         WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
         WebElement inventoryItem = product.findElement(By.xpath("./ancestor::div[@data-test='inventory-item']"));
-        return getProductDetail(inventoryItem);
+        return getProductDetails(inventoryItem);
     }
 
-    private ProductDetail getProductDetail(WebElement inventoryItem) {
+    private ProductDetail getProductDetails(WebElement inventoryItem) {
         return new ProductDetail()
                 .setName(getElementText(inventoryItem, ".//div[@data-test='inventory-item-name']"))
                 .setDescription(getElementText(inventoryItem, ".//div[@data-test='inventory-item-desc']"))
                 .setPriceWithCurrency(getElementText(inventoryItem, ".//div[@data-test='inventory-item-price']"));
     }
 
-    public List<ProductDetail> getAllProductDetail(){
+    public List<ProductDetail> getAllProductDetails(){
         return driver.findElements(By.cssSelector("[data-test='inventory-item']"))
                  .stream()
-                 .map(this::getProductDetail)
+                 .map(this::getProductDetails)
                  .collect(Collectors.toList());
     }
 

@@ -46,8 +46,7 @@ public class CartTest extends BaseTest {
 
     @Test
     public void testMultipleProductCount() {
-        List<String> products = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack");
-
+        List<String> products = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack","Sauce Labs Onesie");
         ProductsPage productsPage = new ProductsPage(driver);
 
         // Add multiple products by chaining the addProduct() method
@@ -63,10 +62,9 @@ public class CartTest extends BaseTest {
 
     @Test
     public void testMultipleProductDetails() {
-        List<String> productNameList = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack");
+        List<String> productNameList = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack","Sauce Labs Onesie");
 
         ProductsPage productsPage = new ProductsPage(driver);
-
         // Add multiple products by chaining the addProduct() method
         for (String product : productNameList) {
             productsPage = productsPage.addProduct(product);
@@ -74,7 +72,7 @@ public class CartTest extends BaseTest {
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
-        List<String> actualProductNamesList = cart.getAllProductDetail().stream()
+        List<String> actualProductNamesList = cart.getAllProductDetails().stream()
                 .map(ProductDetail::getName)
                 .toList();
         assertEquals(productNameList, actualProductNamesList);
@@ -101,22 +99,23 @@ public class CartTest extends BaseTest {
     @Test
     public void testRandomProductAddition() {
         ProductsPage productsPage = new ProductsPage(driver);
-        List<String> allProducts = productsPage.getAllProductNames();
+        List<String> allProductNames = productsPage.getAllProductNames();
 
         // Randomly pick 2 products
-        Collections.shuffle(allProducts);
-        List<String> selectedProducts = allProducts.subList(0, 2);
+        Collections.shuffle(allProductNames);
+        List<String> selectedProductNames = allProductNames.subList(0, 2);
 
         // Add randomly selected products
-        for (String product : selectedProducts) {
-            productsPage = productsPage.addProduct(product);
-        }
+        //for (String product : selectedProducts) {
+        //    productsPage = productsPage.addProduct(product);
+        //}
+        //Use of method reference
+        selectedProductNames.forEach(productsPage::addProduct);
 
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
-
-        assertEquals(cart.getProductCount(), selectedProducts.size());
+        assertEquals(cart.getProductCount(), selectedProductNames.size());
     }
 
     @Test
@@ -142,7 +141,6 @@ public class CartTest extends BaseTest {
     @Test
     public void testRemoveProduct() {
         String productName = "Sauce Labs Bike Light";
-
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addProduct(productName);
         CartIconPage cartIcon = new CartIconPage(driver);
@@ -152,4 +150,38 @@ public class CartTest extends BaseTest {
         cartIcon = new CartIconPage(driver);
         assertEquals(cartIcon.getCartItemCount(), 0);
     }
+
+    @Test
+    public void testRemoveMultipleProduct() {
+        List<String> productNameList = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack","Sauce Labs Onesie");
+        ProductsPage productsPage = new ProductsPage(driver);
+        productNameList.forEach(productsPage::addProduct);
+
+        CartIconPage cartIcon = new CartIconPage(driver);
+        cartIcon.clickCartIcon();
+        CartPage cart = new CartPage(driver);
+
+        // Remove products one by one and verify the cart count
+        for (int i = 0; i < productNameList.size(); i++) {
+            cart.removeProduct(productNameList.get(i));
+            int expectedCount = productNameList.size() - (i + 1);
+            assertEquals(cartIcon.getCartItemCount(), expectedCount,
+                    "Cart count mismatch after removing: " + productNameList.get(i));
+        }
+    }
+
+    @Test
+    public void testContinueShopping() {
+        String productName = "Sauce Labs Bike Light";
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.addProduct(productName);
+        CartIconPage cartIcon = new CartIconPage(driver);
+        cartIcon.clickCartIcon();
+        CartPage cart = new CartPage(driver);
+        cart.clickContinue();
+        productsPage = new ProductsPage(driver);
+        assertEquals(productsPage.getTitle(), "Products");
+    }
+
+
 }
