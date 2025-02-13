@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class CartTest extends BaseTest {
 
@@ -54,13 +54,33 @@ public class CartTest extends BaseTest {
         for (String product : products) {
             productsPage = productsPage.addProduct(product);
         }
-
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
-
         assertEquals(cart.getProductCount(), products.size());
     }
+
+
+    @Test
+    public void testMultipleProductDetails() {
+        List<String> productNameList = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack");
+
+        ProductsPage productsPage = new ProductsPage(driver);
+
+        // Add multiple products by chaining the addProduct() method
+        for (String product : productNameList) {
+            productsPage = productsPage.addProduct(product);
+        }
+        CartIconPage cartIcon = new CartIconPage(driver);
+        cartIcon.clickCartIcon();
+        CartPage cart = new CartPage(driver);
+        List<String> actualProductNamesList = cart.getAllProductDetail().stream()
+                .map(ProductDetail::getName)
+                .toList();
+        assertEquals(productNameList, actualProductNamesList);
+    }
+
+
 
     @Test
     public void testAllProductsAddedToCart() {
@@ -106,7 +126,6 @@ public class CartTest extends BaseTest {
                 "Water-resistant with 3 lighting modes, 1 AAA battery included.";
         String expectedPrice = "$9.99";
         BigDecimal expectedPriceInDecimal = new BigDecimal("9.99").setScale(2, RoundingMode.HALF_UP);
-
 
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addProduct(productName);
