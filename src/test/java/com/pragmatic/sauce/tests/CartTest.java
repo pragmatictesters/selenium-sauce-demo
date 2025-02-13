@@ -7,6 +7,8 @@ import com.pragmatic.sauce.pages.ProductDetail;
 import com.pragmatic.sauce.pages.ProductsPage;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -103,6 +105,8 @@ public class CartTest extends BaseTest {
         String expectedDescription = "A red light isn't the desired state in testing but it sure helps when riding your bike at night. " +
                 "Water-resistant with 3 lighting modes, 1 AAA battery included.";
         String expectedPrice = "$9.99";
+        BigDecimal expectedPriceInDecimal = new BigDecimal("9.99").setScale(2, RoundingMode.HALF_UP);
+
 
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.addProduct(productName);
@@ -113,6 +117,7 @@ public class CartTest extends BaseTest {
 
         assertEquals(product.getDescription(), expectedDescription);
         assertEquals(product.getPriceWithCurrency(), expectedPrice);
+        assertEquals(product.getPrice(), expectedPriceInDecimal);
     }
 
     @Test

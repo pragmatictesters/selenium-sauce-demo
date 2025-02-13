@@ -1,10 +1,14 @@
 package com.pragmatic.sauce.pages;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ProductDetail {
 
     private  String name;
     private String description;
     private String priceWithCurrency;
+    private BigDecimal price;
     private String imageAlt;
     private String imageSrc;
 
@@ -32,6 +36,10 @@ public class ProductDetail {
 
     public ProductDetail setPriceWithCurrency(String priceWithCurrency) {
         this.priceWithCurrency = priceWithCurrency;
+
+        BigDecimal price = new BigDecimal(priceWithCurrency.replace("$", ""))
+                .setScale(2, RoundingMode.HALF_UP);
+        setPrice(price);
         return this;
     }
 
@@ -51,6 +59,15 @@ public class ProductDetail {
 
     public ProductDetail setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
+        return this;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    private ProductDetail setPrice(BigDecimal price) {
+        this.price = price;
         return this;
     }
 }
