@@ -1,4 +1,4 @@
-# Selenium Advanced Training - December 2024
+# Selenium Advanced Training - March 2025
 
 Welcome to the **Pragmatic Training - Selenium Advanced** repository! This repository contains the sample code, documentation, and resources for the **Selenium Advanced WebDriver** course conducted by **Pragmatic Test Labs**.
 
