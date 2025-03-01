@@ -11,9 +11,9 @@
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <maven.compiler.source>${env.JAVA_VERSION}</maven.compiler.source>
+        <maven.compiler.source>21</maven.compiler.source>
         <!--suppress UnresolvedMavenProperty -->
-        <maven.compiler.target>${env.JAVA_VERSION}</maven.compiler.target>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium-java.version>4.28.1</selenium-java.version>
         <testng.version>7.10.2</testng.version>
