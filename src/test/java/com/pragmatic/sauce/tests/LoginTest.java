@@ -2,13 +2,14 @@ package com.pragmatic.sauce.tests;
 
 import com.pragmatic.sauce.base.BaseTest;
 import com.pragmatic.sauce.pages.LoginPage;
- import  static org.testng.Assert.*;
-
 import com.pragmatic.sauce.pages.ProductsPage;
 import com.pragmatic.sauce.util.ConfigReader;
 import com.pragmatic.sauce.util.TestDataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+
+import static org.testng.Assert.assertEquals;
+
 
 public class LoginTest extends BaseTest {
 
