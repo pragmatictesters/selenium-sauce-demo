@@ -3,7 +3,7 @@
 <suite name="Cucumber Test Suite">
     <test name="Cucumber Tests">
         <classes>
-            <class name="com.pragmatic.sauce.runner.TestRunner" />
+            <class name="com.pragmatic.sauce.runner.TestRunner2" />
         </classes>
     </test>
 </suite>
