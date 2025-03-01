@@ -10,13 +10,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
