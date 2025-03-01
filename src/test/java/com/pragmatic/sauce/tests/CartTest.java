@@ -46,17 +46,22 @@ public class CartTest extends BaseTest {
 
     @Test
     public void testMultipleProductCount() {
-        List<String> products = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack","Sauce Labs Onesie");
+        List<String> productNamesToAdd = Arrays.asList("Sauce Labs Bike Light", "Sauce Labs Backpack","Sauce Labs Onesie");
         ProductsPage productsPage = new ProductsPage(driver);
 
         // Add multiple products by chaining the addProduct() method
-        for (String product : products) {
+        for (String product : productNamesToAdd) {
             productsPage = productsPage.addProduct(product);
         }
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
-        assertEquals(cart.getProductCount(), products.size());
+        List<String> actualProductNameListInCart = cart.getAllProductDetails()
+                .stream()
+                .map(ProductDetail::getName)
+                .toList();
+        assertEquals(actualProductNameListInCart,productNamesToAdd);
+        assertEquals(cart.getProductCount(), productNamesToAdd.size());
     }
 
 
@@ -66,9 +71,10 @@ public class CartTest extends BaseTest {
 
         ProductsPage productsPage = new ProductsPage(driver);
         // Add multiple products by chaining the addProduct() method
-        for (String product : productNameList) {
-            productsPage = productsPage.addProduct(product);
-        }
+//        for (String product : productNameList) {
+//            productsPage = productsPage.addProduct(product);
+//        }
+        productNameList.forEach(productsPage::addProduct);
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
@@ -83,17 +89,21 @@ public class CartTest extends BaseTest {
     @Test
     public void testAllProductsAddedToCart() {
         ProductsPage productsPage = new ProductsPage(driver);
-        List<String> allProducts = productsPage.getAllProductNames();
+        List<String> allProductNames = productsPage.getAllProductNames();
 
         // Add all available products
-        for (String product : allProducts) {
-            productsPage = productsPage.addProduct(product);
-        }
+//        for (String product : allProductNames) {
+//            productsPage = productsPage.addProduct(product);
+//        }
+
+        allProductNames.forEach(productsPage::addProduct);
+
         CartIconPage cartIcon = new CartIconPage(driver);
         cartIcon.clickCartIcon();
         CartPage cart = new CartPage(driver);
-
-        assertEquals(cart.getProductCount(), allProducts.size());
+        List<String> actualProductList = cart.getAllProductDetails().stream().map(ProductDetail::getName).toList();
+        assertEquals(actualProductList, allProductNames);
+        assertEquals(cart.getProductCount(), allProductNames.size());
     }
 
     @Test
@@ -182,6 +192,5 @@ public class CartTest extends BaseTest {
         productsPage = new ProductsPage(driver);
         assertEquals(productsPage.getTitle(), "Products");
     }
-
 
 }

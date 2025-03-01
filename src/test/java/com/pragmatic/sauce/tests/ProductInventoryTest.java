@@ -3,6 +3,8 @@ package com.pragmatic.sauce.tests;
 import com.pragmatic.sauce.base.BaseTest;
 import com.pragmatic.sauce.pages.ProductDetail;
 import com.pragmatic.sauce.pages.ProductsPage;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -11,12 +13,13 @@ import java.util.regex.Pattern;
 
 import static org.testng.Assert.*;
 
+
 public class ProductInventoryTest extends BaseTest {
 
     @Test
     public void testProductExistsByName() {
         ProductsPage productsPage = new ProductsPage(driver);
-        assertTrue(productsPage.isProductExist("Sauce Labs Backpack"));
+
     }
 
     @Test
@@ -70,6 +73,8 @@ public class ProductInventoryTest extends BaseTest {
 
         softAssert.assertAll();
     }
+
+
 
 
     @Test

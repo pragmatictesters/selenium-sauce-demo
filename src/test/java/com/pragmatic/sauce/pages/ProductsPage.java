@@ -1,5 +1,6 @@
 package com.pragmatic.sauce.pages;
 
+import com.pragmatic.sauce.util.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +23,7 @@ public class ProductsPage {
     @FindBy(css = "[data-test='title']")
     WebElement ttlProducts;
 
-     @FindBy(css = "[data-test='product-sort-container']")
+    @FindBy(css = "[data-test='product-sort-container']")
     WebElement lstSort;
 
 
@@ -36,6 +37,7 @@ public class ProductsPage {
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        info("Product page is initialise");
     }
 
     public String getTitle() {
@@ -99,7 +101,14 @@ public class ProductsPage {
     }
 
 
-//
+    public ProductsPage clickAllAddToCartButtons() {
+        driver.findElements(By.xpath("//button[text()='Add to cart']")).forEach(WebElement::click);
+        return this;
+
+    }
+
+
+
 //    This code is refactored
 //    public List<ProductDetail> getAllProductDetails() {
 //        // Find all products on the page
@@ -145,8 +154,6 @@ public class ProductsPage {
     }
 
 
-
-
     public ProductsPage clickButton(String productName, String buttonCaption) {
         // Find the product based on its name
         WebElement product = driver.findElement(By.xpath(String.format(PRODUCT_XPATH, productName)));
@@ -168,6 +175,7 @@ public class ProductsPage {
         this.clickButton(productName, "Add to cart");
         return this;
     }
+
     public ProductsPage removeProduct(String productName) {
         this.clickButton(productName, "Remove");
         return this;
@@ -178,7 +186,7 @@ public class ProductsPage {
         List<ProductDetail> allProducts = getAllProductDetails();
         List<String> allProductNames = new ArrayList<>();
 
-        for (ProductDetail productDetail: allProducts) {
+        for (ProductDetail productDetail : allProducts) {
             allProductNames.add(productDetail.getName());
         }
         return allProductNames;
@@ -196,21 +204,25 @@ public class ProductsPage {
                 .collect(Collectors.toList());
     }
 
-    public ProductsPage sortZ2A(){
-        Select selSort =  new Select (lstSort);
-        selSort.selectByVisibleText("Name (Z to A)");
-        return this;
+    public ProductsPage sortZ2A() {
+        return sort("Name (Z to A)");
     }
 
     public ProductsPage sortPriceLowToHigh() {
-        Select selSort =  new Select (lstSort);
-        selSort.selectByVisibleText("Price (low to high)");
-        return this;
+        return sort("Price (low to high)");
     }
 
     public ProductsPage sortPriceHighToLow() {
-        Select selSort =  new Select (lstSort);
-        selSort.selectByVisibleText("Price (high to low)");
+        return sort("Price (high to low)");
+    }
+
+    public ProductsPage sortA2Z() {
+        return sort("Name (A to Z)");
+    }
+
+    private ProductsPage sort(String option) {
+        Select selSort = new Select(lstSort);
+        selSort.selectByVisibleText(option);
         return this;
     }
 }

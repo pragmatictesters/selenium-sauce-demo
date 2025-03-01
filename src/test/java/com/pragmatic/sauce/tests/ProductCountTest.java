@@ -29,5 +29,12 @@ public class ProductCountTest extends BaseTest {
         assertEquals(cartIconPage.getCartItemCount(), 0);
     }
 
+    @Test
+    public void testClickAllAllAddToCartButtons(){
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.clickAllAddToCartButtons();
+        CartIconPage cartIconPage = new CartIconPage(driver);
+        assertEquals(cartIconPage.getCartItemCount(), 6);
+    }
 
 }

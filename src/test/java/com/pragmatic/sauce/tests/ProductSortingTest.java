@@ -25,6 +25,22 @@ public class ProductSortingTest extends BaseTest {
     }
 
     @Test
+    public void testSortingA2Z() {
+        ProductsPage productsPage = new ProductsPage(driver);
+        productsPage.sortPriceLowToHigh();
+        productsPage.sortA2Z();
+
+        List<String> actualProductNames = productsPage.getAllProductNames();
+        // Create a sorted copy of the product names
+        List<String> expectedProductNames = new ArrayList<>(actualProductNames);
+        Collections.sort(expectedProductNames); // Sort alphabetically
+        assertEquals(actualProductNames, expectedProductNames, "Products are not sorted  A to Z by default!");
+    }
+
+
+
+
+    @Test
     public void testSortingZ2A() {
         ProductsPage productsPage = new ProductsPage(driver);
         productsPage.sortZ2A();
