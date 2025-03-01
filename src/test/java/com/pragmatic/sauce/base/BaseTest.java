@@ -10,10 +10,11 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.asserts.SoftAssert;
 
-import static com.pragmatic.sauce.util.LogManager.*;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
+
+import static com.pragmatic.sauce.util.LogManager.debug;
 
 public class BaseTest {
 
