@@ -10,10 +10,17 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
-public class LoginSteps  {
+public class LoginSteps {
+
+
+
     private LoginPage loginPage;
-    private WebDriver driver;
+
+    protected WebDriver driver;
+    protected SoftAssert softAssert;
+
 
     @Before
     public void before(){
@@ -68,4 +75,10 @@ public class LoginSteps  {
         loginPage.login("", password);
 
     }
+
+//    @Given("the user is logged into the application")
+//    public void theUserIsLoggedIntoTheApplication() {
+//        loginPage.login("standard_user", "secret_sauce");
+//    }
+
 }
